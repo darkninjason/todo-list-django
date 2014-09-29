@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #django-template
 
 .. _`Vagrant`: http://www.vagrantup.com/
