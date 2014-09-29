@@ -1,33 +1,21 @@
-/**
- * UI Input Select Implementation
- * @module built.ui.controls.input-select
- */
 define(function (require, exports, module) {
 
 var _            = require('underscore');
+var Marionette   = require('marionette');
 var InputSelect  = require('built/core/controls/forms/input-select').InputSelect;
 var focus        = require('built/core/events/focus');
 var events       = require('built/core/events/event');
 var getElementId = require('built/core/utils/helpers').getElementId;
 
-var InputSelectMarionette = InputSelect.extend(
-/** @lends built.ui.controls.input-select.InputSelectMarionette.prototype */
-{
+var InputSelectMarionette = InputSelect.extend({
 
-    onDestroy : function(){
+    onClose : function(){
         this.marionetteDict = [];
     },
 
-    /**
-     * Creates a new InputSelectMarionette
-     *
-     * @constructs
-     * @extends built.core.controls.forms.input-select.InputSelect
-     *
-     */
-    constructor : function() {
-        InputSelect.prototype.constructor.apply(this, arguments);
+    initialize : function() {
 
+        InputSelect.prototype.initialize.apply(this,arguments);
         this.on(focus.BLUR, this._onItemBlur);
         this.on(focus.FOCUS, this._onItemFocus);
         this.on(events.SELECT, this._onItemSelect);
@@ -50,9 +38,9 @@ var InputSelectMarionette = InputSelect.extend(
 
     _triggerEventOnViewForElement : function(event, $element){
         var key = getElementId($element);
-        var childView = this.marionetteDict[key];
-        if(childView){
-            childView.trigger(event);
+        var itemView = this.marionetteDict[key];
+        if(itemView){
+            itemView.trigger(event);
         }
     },
 

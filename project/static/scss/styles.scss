@@ -1,0 +1,71 @@
+body {
+	text-align: center;
+	padding: 20px;
+
+}
+
+ul {
+	margin: 0 auto;
+	padding: 0;
+	list-style: none;
+	text-align: left;
+	width: 215px;
+
+	li {
+		padding: 10px;
+		position: relative;
+
+		.view {
+			button {
+				float: right;
+			}
+		}
+
+		.edit {
+			display: none;
+		}
+
+		&.completed {
+			text-decoration: line-through;
+
+			.active & {
+				display: none;
+			}
+		}
+
+		.completed & {
+			display: none;
+
+			&.completed {
+				display: block;
+			}
+		}
+
+		.toggle {
+			position: absolute;
+			left: -20px;
+		}
+
+	}
+}
+
+footer {
+	font-size: 12px;
+	width: 500px;
+	margin: 20px auto;
+	text-align: center;
+
+	.items-left {
+		float: left;
+	}
+
+	.clear-completed {
+		float: right;
+	}
+
+	ul.filters {
+		li {
+			display: inline-block;
+		}
+	}
+}

@@ -1,7 +1,3 @@
-/**
- * Pop View
- * @module built.app.popovers.views.pop
- */
 define(function(require, exports, module) {
 
 var _ = require('underscore');
@@ -10,23 +6,9 @@ var dom = require('built/ui/helpers/dom');
 var keys = require('built/app/keys');
 var ClickTestResponder = require('built/core/responders/clicks').ClickTestResponder;
 
-var PopView = marionette.View.extend(
-/** @lends built.app.popovers.views.pop.PopView.prototype */
-{
+var PopView = marionette.View.extend({
     view: null,
     defaultEdge: 'bottom',
-
-    /**
-     * Creates a new PopView
-     *
-     * @constructs
-     * @extends marionette.View
-     * @param {object} [options] Options for Initialization
-     *
-     */
-    constructor: function(){
-        marionette.View.prototype.constructor.apply(this, arguments);
-    },
 
     show: function(view, options){
         options = options || {};
@@ -41,7 +23,7 @@ var PopView = marionette.View.extend(
 
         if (!options.rect) throw new Error('Must provide at least a \'rect\' option');
 
-        if(this.currentView) this.destroy();
+        if(this.currentView) this.close();
 
         rect = options.rect;
 
@@ -205,7 +187,7 @@ var PopView = marionette.View.extend(
         // if escape is pressed while this pop view is
         // displayed, auto wire up closing it.
         if (e.keyCode == 27){ // ESCAPE
-            this.destroy();
+            this.close();
         }
 
         // no matter what we stop the key event
@@ -214,7 +196,7 @@ var PopView = marionette.View.extend(
     },
 
     wantsDismissFromClick: function(){
-        this.destroy();
+        this.close();
     },
 
     open: function(view){
@@ -228,26 +210,26 @@ var PopView = marionette.View.extend(
         keys.registerInResponderChain(view);
 
         // if we click anywhere outside of this
-        // pop view, we want this view to destroy.
+        // pop view, we want this view to close.
         this._clicks = new ClickTestResponder({
             el: view.$el,
             clickOutside: _.bind(this.wantsDismissFromClick, this)
         });
 
-        view.once('complete', _.bind(this.destroy, this));
+        view.once('complete', _.bind(this.close, this));
     },
 
-    destroy: function(){
+    close: function(){
         keys.removeFromResponderChain(this.currentView);
         keys.removeFromResponderChain(this);
-        this._clicks.destroy();
+        this._clicks.close();
 
         this.$el.remove();
 
-        // save the view as Region.destroy will
+        // save the view as Region.close will
         // delete this.currentView
         var view = this.currentView;
-        marionette.Region.prototype.destroy.call(this);
+        marionette.Region.prototype.close.call(this);
 
         this.deferred.resolve(view);
         this.deferred = null;

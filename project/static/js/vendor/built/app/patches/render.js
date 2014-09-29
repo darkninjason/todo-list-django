@@ -4,9 +4,9 @@ define(function (require, exports, module) {
 
     _.extend(marionette.ItemView.prototype, {
         render: function(){
-            this.isDestroyed = false;
+            this.isClosed = false;
             this.triggerMethod("before:render", this);
-            this.triggerMethod("before:render", this);
+            this.triggerMethod("item:before:render", this);
 
             var data = this.serializeData();
             data = this.mixinTemplateHelpers(data);
@@ -21,7 +21,7 @@ define(function (require, exports, module) {
             this.bindUIElements();
 
             this.triggerMethod("render", this);
-            this.triggerMethod("render", this);
+            this.triggerMethod("item:rendered", this);
 
             return this;
         },
@@ -30,11 +30,11 @@ define(function (require, exports, module) {
     _.extend(marionette.CompositeView.prototype, {
         render: function(){
             this.isRendered = true;
-            this.isDestroyed = false;
-            this.resetChildViewContainer();
+            this.isClosed = false;
+            this.resetItemViewContainer();
 
             this.triggerBeforeRender();
-            var html = this._renderRoot();
+            var html = this.renderModel();
 
             if(html){
                 this.$el.html(html);
@@ -44,11 +44,11 @@ define(function (require, exports, module) {
             // will not be available until after the model is rendered, but should be
             // available before the collection is rendered.
             this.bindUIElements();
-            this.triggerMethod("render:template");
+            this.triggerMethod("composite:model:rendered");
 
             this._renderChildren();
 
-            this.triggerMethod("render");
+            this.triggerMethod("composite:rendered");
             this.triggerRendered();
             return this;
         },

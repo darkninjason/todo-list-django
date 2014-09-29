@@ -1,16 +1,3 @@
-
-/**
- * Keyboard handlers for an application
- *
- * .. note ::
- *      An optional dependency on built/app/modals
- *      if you wish to have the application key manager
- *      work in concert with built/app/modals, pass the modal
- *      module into the initialize options
- *      {modals: theModule}
- *
- * @module built.app.keys
- */
 define(function(require, exports, module) {
 
 var _ = require('underscore');
@@ -18,6 +5,11 @@ var marionette = require('marionette');
 var KeyResponder = require('built/core/responders/keys').KeyResponder;
 var ArrayManager = require('built/core/managers/array').ArrayManager;
 
+// An optional dependency on built/app/modals
+// if you wish to have the application key manager
+// work in concert with built/app/modals, pass the modal
+// module into the initialize options
+// {modals: theModule}
 
 var modals = null;
 
@@ -25,15 +17,6 @@ var _responderChain = new ArrayManager();
 var _keyResponder;
 
 
-/**
- * Returns the current key for a keyboard event passed
- *
- * @function
- * @memberOf built.app.keys
- * @param  {Event} e Keyboard event
- * @return {String}       the string value representing that key
- *
- */
 function getKeyFromEvent(e){
     var key = String.fromCharCode(e.which);
     if(!e.shiftKey) key = key.toLowerCase();
@@ -42,7 +25,7 @@ function getKeyFromEvent(e){
 }
 
 
-function _removeFromResponderChain(view){
+function removeFromResponderChain(view){
     var array = _responderChain.getArray();
     var index = array.indexOf(view);
     if(index == -1) return;
@@ -50,33 +33,16 @@ function _removeFromResponderChain(view){
      _responderChain.removeObjectAt(index);
 }
 
-/**
- * Registers a given marionette view in the responder chain
- *
- * @function
- * @memberOf built.app.keys
- * @param  {View} view Marionette view
- *
- */
 function registerInResponderChain(view){
     if (view.once){
-        view.once('destroy', function(){
-            _removeFromResponderChain(view);
+        view.once('close', function(){
+            removeFromResponderChain(view);
         });
     }
 
     _responderChain.insertObject(view);
 }
 
-/**
- * initializes the key responder
- *
- * @function
- * @memberOf built.app.keys
- * @param {object} [options] Options for Initialization
- * @return {Date}       the first day of the month passed in
- *
- */
 function initialize(options){
     options = options || {};
     modals = options.modals || null;
@@ -116,7 +82,7 @@ function _processKeys(sender, e){
     //
     // https://developer.apple.com/librarY/mac/documentation/Cocoa/Conceptual/EventOverview/HandlingKeyEvents/HandlingKeyEvents.html#//apple_ref/doc/uid/10000060i-CH7-SW1
     //
-    // result here will be the childView that handeled this
+    // result here will be the itemView that handeled this
     // event.
 
     result = _.find(chain, function(item){

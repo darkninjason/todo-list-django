@@ -1,7 +1,3 @@
-/**
- * Select Controller
- * @module built.core.controls.forms.select
- */
 define(function(require, exports, module){
 
 var _                  = require('underscore');
@@ -16,25 +12,11 @@ var focus              = require('built/core/events/focus');
 var event              = require('built/core/events/event');
 var data               = require('built/core/events/data');
 
-var Select = marionette.Controller.extend(
-/** @lends built.core.controls.forms.select.Select.prototype */
-{
+var Select = marionette.Controller.extend({
     _searchText:'',
     searchTimeout: 400,
 
-
-    /**
-     * Creates a new Select
-     *
-     * @constructs
-     * @extends marionette.Controller
-     * @param {object} [options] Options for Initialization
-     *
-     */
-    constructor: function(options){
-        marionette.Controller.prototype.constructor.apply(this, arguments);
-        this.listenTo(this, 'destroy', this.deinit);
-
+    initialize: function(options){
         _.extend(this, options);
         _.bindAll(this,
             'insertText',
@@ -117,9 +99,9 @@ var Select = marionette.Controller.extend(
         this.focusManager.focusIndex(this.indexManager.getIndex());
     },
 
-    deinit: function(){
-        this.destroyManagers();
-        this.keyResponder.destroy();
+    onClose: function(){
+        this.closeManagers();
+        this.keyResponder.close();
     },
 
     onOptionClicked: function(e){
@@ -135,7 +117,7 @@ var Select = marionette.Controller.extend(
 
     setElements: function($elements){
         this._$elements = $elements;
-        this.destroyManagers();
+        this.closeManagers();
 
         helpers.registerElement($elements);
 
@@ -166,16 +148,16 @@ var Select = marionette.Controller.extend(
             });
     },
 
-    destroyManagers: function(){
+    closeManagers: function(){
         if(this.focusManager){
-            this.focusManager.destroy();
+            this.focusManager.close();
         }
 
         if(this.indexManager){
-            this.indexManager.destroy();
+            this.indexManager.close();
         }
         if(this.mouseResponder){
-            this.mouseResponder.destroy();
+            this.mouseResponder.close();
         }
 
 

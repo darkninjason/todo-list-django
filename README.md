@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #django-template
 
 .. _`Vagrant`: http://www.vagrantup.com/
@@ -27,4 +28,3 @@ Basic Django project
 ## Credentials
     admin username: admin
     admin password: pass
-  

@@ -1,7 +1,3 @@
-/**
- * Modal View
- * @module built.app.modals.views.modal
- */
 define(function(require, exports, module) {
 
 var marionette = require('marionette');
@@ -12,22 +8,12 @@ var events = require('../events');
 
 require('built/app/patches/render');
 
-var ModalView = marionette.ItemView.extend(
-/** @lends built.app.modals.views.modal.ModalView.prototype */
-{
+var ModalView = marionette.ItemView.extend({
     className: 'view',
-    childView: null,
+    itemView: null,
 
-    /**
-     * Creates a new ModalView
-     *
-     * @constructs
-     * @extends marionette.ItemView
-     * @param {object} [options] Options for Initialization
-     *
-     */
     initialize: function(options){
-        this.view = options.childView;
+        this.view = options.itemView;
     },
 
     onShow: function(){
@@ -45,8 +31,8 @@ var ModalView = marionette.ItemView.extend(
         return this._data;
     },
 
-    onDestroy: function(){
-        this.view.destroy();
+    onClose: function(){
+        this.view.close();
     }
 });
 
